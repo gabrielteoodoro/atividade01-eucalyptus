@@ -1,0 +1,19 @@
+ATIVIDADE 01 - ENTREGA FINAL
+
+ARQUIVO PRINCIPAL: RELATORIO_PRINCIPAL.html
+
+Este arquivo contem toda a analise solicitada:
+- Analise descritiva
+- ANOVA DIC e DBC  
+- Teste de Tukey
+- Comparacao de delineamentos
+
+RESULTADOS:
+- F (Procedencias): 40.05 (p < 0.001) SIGNIFICATIVO
+- F (Blocos): 3.75 (p < 0.05) SIGNIFICATIVO
+- CV Experimental: 5.43% EXCELENTE
+- Melhor procedencia: P1 (362.75 m3.ha-1)
+
+PARA ENTREGAR:
+1. Arquivo HTML: RELATORIO_PRINCIPAL.html
+2. Pasta completa compactada em ZIP/RAR
