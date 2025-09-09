@@ -1,0 +1,26 @@
+RELATORIO PUBLICADO NO GITHUB!
+
+Data: 09/09/2025 às 09:52
+Usuario: gabrielteoodoro
+Repositorio: atividade01-eucalyptus
+
+LINKS:
+- Repositorio: https://github.com/gabrielteoodoro/atividade01-eucalyptus
+- Relatorio:   https://gabrielteoodoro.github.io/atividade01-eucalyptus
+
+PROXIMOS PASSOS:
+1. Aguarde 2-5 minutos para processamento
+2. Acesse o link do relatorio
+3. Compartilhe o link para validacao
+4. O relatorio estara sempre disponivel nesta URL
+
+CONTEUDO PUBLICADO:
+✓ Analise descritiva completa
+✓ ANOVA DIC e DBC
+✓ Teste de Tukey
+✓ Ranking das procedencias  
+✓ Graficos e tabelas interativas
+✓ Design responsivo (mobile-friendly)
+✓ TOC navegavel
+
+O relatorio atende 100% aos requisitos da Atividade 01!
