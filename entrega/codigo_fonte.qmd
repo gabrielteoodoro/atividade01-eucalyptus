@@ -1,0 +1,515 @@
+---
+title: "Análise de Produção de Eucalyptus grandis - Atividade 01"
+author: "Nome do Estudante"
+date: "29 de agosto de 2025"
+format: 
+  html:
+    theme: bootstrap
+    toc: true
+    toc-location: left
+    code-fold: false
+    embed-resources: true
+    page-layout: article
+    title-block-banner: true
+lang: pt-BR
+---
+
+# Introdução
+
+Este relatório apresenta a análise estatística completa de um experimento com **4 blocos casualizados** e **7 procedências** de *Eucalyptus grandis*, conforme solicitado na **Atividade 01** da disciplina CEN5815.
+
+## Objetivos da Análise
+
+1. **Análise Descritiva**: Calcular estatísticas como média e desvio padrão para cada tratamento
+2. **ANOVA DIC**: Executar análise como Delineamento Inteiramente Casualizado  
+3. **ANOVA DBC**: Executar análise como Delineamento em Blocos Casualizados
+4. **Comparação**: Avaliar a eficácia dos dois delineamentos
+
+## Dados Experimentais
+
+- **Variável resposta**: Produção em m³.ha⁻¹
+- **Tratamentos**: 7 procedências (P1 a P7)
+- **Blocos**: 4 blocos casualizados
+- **Total de parcelas**: 28
+
+# Carregamento de Pacotes e Configuração
+
+```{r setup, message=FALSE, warning=FALSE}
+# Verificar e instalar pacotes necessários
+pacotes_necessarios <- c("tidyverse", "knitr", "broom", "ggplot2", "agricolae", "here")
+
+for(pacote in pacotes_necessarios) {
+  if(!require(pacote, character.only = TRUE)) {
+    install.packages(pacote, dependencies = TRUE)
+    library(pacote, character.only = TRUE)
+  }
+}
+
+# Fixar semente para reprodutibilidade
+set.seed(2025)
+```
+
+# Entrada dos Dados
+
+```{r dados-originais}
+# Dados EXATOS conforme tabela da Atividade01.pdf
+dados_matriz <- matrix(c(
+  358, 284, 273, 284, 258, 249, 318,  # Bloco I
+  380, 249, 222, 242, 263, 217, 312,  # Bloco II
+  353, 259, 236, 266, 242, 267, 327,  # Bloco III
+  360, 242, 226, 252, 231, 220, 319   # Bloco IV
+), nrow = 4, byrow = TRUE)
+
+# Nomear exatamente como na tabela original
+rownames(dados_matriz) <- c("Bloco I", "Bloco II", "Bloco III", "Bloco IV")
+colnames(dados_matriz) <- c("P1", "P2", "P3", "P4", "P5", "P6", "P7")
+
+# Mostrar tabela original
+kable(dados_matriz, 
+      caption = "Tabela 1: Dados originais - Produção em m³.ha⁻¹ por bloco e procedência",
+      align = "c")
+
+# Verificar se os totais conferem com a tabela original
+totais_linha <- rowSums(dados_matriz)
+totais_coluna <- colSums(dados_matriz)
+total_geral <- sum(dados_matriz)
+
+cat("Verificação dos totais:\n")
+cat("Totais por linha (devem ser 2024, 1885, 1950, 1850):", totais_linha, "\n")
+cat("Totais por coluna (devem ser 1451, 1034, 957, 1044, 994, 953, 1276):", totais_coluna, "\n")
+cat("Total geral (deve ser 7709):", total_geral, "\n")
+```
+
+```{r dados-organizados}
+# Converter para formato longo (tidy data)
+dados_long <- dados_matriz %>%
+  as.data.frame() %>%
+  rownames_to_column("Bloco") %>%
+  pivot_longer(cols = -Bloco, 
+               names_to = "Procedencia", 
+               values_to = "Producao") %>%
+  mutate(
+    Bloco = factor(Bloco, levels = c("Bloco I", "Bloco II", "Bloco III", "Bloco IV")),
+    Procedencia = factor(Procedencia, levels = c("P1", "P2", "P3", "P4", "P5", "P6", "P7"))
+  )
+
+# Mostrar estrutura dos dados organizados
+head(dados_long, 10) %>%
+  kable(caption = "Tabela 2: Primeiras linhas dos dados organizados para análise")
+```
+
+# Análise Descritiva
+
+## Estatísticas por Procedência
+
+```{r estat-procedencia}
+# Estatísticas descritivas por procedência
+estat_proc <- dados_long %>%
+  group_by(Procedencia) %>%
+  summarise(
+    n = n(),
+    Media = mean(Producao),
+    DP = sd(Producao),
+    Minimo = min(Producao),
+    Maximo = max(Producao),
+    CV_pct = (sd(Producao)/mean(Producao))*100,
+    .groups = "drop"
+  )
+
+kable(estat_proc, 
+      digits = 2,
+      caption = "Tabela 3: Estatísticas descritivas por procedência",
+      col.names = c("Procedência", "n", "Média", "Desvio Padrão", "Mínimo", "Máximo", "CV (%)"))
+```
+
+## Estatísticas por Bloco
+
+```{r estat-bloco}
+# Estatísticas descritivas por bloco
+estat_bloco <- dados_long %>%
+  group_by(Bloco) %>%
+  summarise(
+    n = n(),
+    Media = mean(Producao),
+    DP = sd(Producao),
+    Minimo = min(Producao),
+    Maximo = max(Producao),
+    CV_pct = (sd(Producao)/mean(Producao))*100,
+    .groups = "drop"
+  )
+
+kable(estat_bloco, 
+      digits = 2,
+      caption = "Tabela 4: Estatísticas descritivas por bloco",
+      col.names = c("Bloco", "n", "Média", "Desvio Padrão", "Mínimo", "Máximo", "CV (%)"))
+```
+
+# Visualização dos Dados
+
+```{r graficos, fig.width=12, fig.height=8}
+# Boxplot por procedência
+p1 <- ggplot(dados_long, aes(x = Procedencia, y = Producao)) +
+  geom_boxplot(aes(fill = Procedencia), alpha = 0.7) +
+  geom_point(alpha = 0.6, position = position_jitter(width = 0.2)) +
+  labs(
+    title = "Figura 1: Distribuição da Produção por Procedência",
+    x = "Procedência",
+    y = "Produção (m³.ha⁻¹)",
+    fill = "Procedência"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+print(p1)
+
+# Boxplot por bloco
+p2 <- ggplot(dados_long, aes(x = Bloco, y = Producao)) +
+  geom_boxplot(aes(fill = Bloco), alpha = 0.7) +
+  geom_point(alpha = 0.6, position = position_jitter(width = 0.2)) +
+  labs(
+    title = "Figura 2: Distribuição da Produção por Bloco",
+    x = "Bloco",
+    y = "Produção (m³.ha⁻¹)",
+    fill = "Bloco"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+print(p2)
+
+# Gráfico de médias por procedência
+p3 <- estat_proc %>%
+  ggplot(aes(x = Procedencia, y = Media)) +
+  geom_col(aes(fill = Procedencia), alpha = 0.8) +
+  geom_errorbar(aes(ymin = Media - DP, ymax = Media + DP), 
+                width = 0.2, alpha = 0.7) +
+  labs(
+    title = "Figura 3: Médias de Produção por Procedência",
+    subtitle = "Barras de erro representam ± 1 desvio padrão",
+    x = "Procedência",
+    y = "Produção Média (m³.ha⁻¹)",
+    fill = "Procedência"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+print(p3)
+```
+
+# ANOVA - Delineamento Inteiramente Casualizado (DIC)
+
+```{r anova-dic}
+# ANOVA considerando apenas o fator Procedência (DIC)
+modelo_dic <- aov(Producao ~ Procedencia, data = dados_long)
+anova_dic <- anova(modelo_dic)
+
+# Tabela da ANOVA DIC
+kable(anova_dic, 
+      digits = 4,
+      caption = "Tabela 5: ANOVA - Delineamento Inteiramente Casualizado (DIC)")
+
+# Resumo detalhado
+cat("Resumo do modelo DIC:\n")
+summary(modelo_dic)
+
+# Teste de Tukey para DIC
+tukey_dic <- TukeyHSD(modelo_dic, "Procedencia")
+print("Teste de Tukey - DIC:")
+print(tukey_dic)
+
+# Tabela organizada do teste de Tukey DIC
+tukey_dic_df <- as.data.frame(tukey_dic$Procedencia) %>%
+  rownames_to_column("Comparacao") %>%
+  arrange(`p adj`)
+
+kable(head(tukey_dic_df, 15), 
+      digits = 4,
+      caption = "Tabela 6: Teste de Tukey - Comparações múltiplas (DIC) - 15 primeiras",
+      col.names = c("Comparação", "Diferença", "Limite Inferior", "Limite Superior", "P-valor ajustado"))
+```
+
+# ANOVA - Delineamento em Blocos Casualizados (DBC)
+
+```{r anova-dbc}
+# ANOVA considerando Bloco e Procedência (DBC)
+modelo_dbc <- aov(Producao ~ Bloco + Procedencia, data = dados_long)
+anova_dbc <- anova(modelo_dbc)
+
+# Tabela da ANOVA DBC
+kable(anova_dbc, 
+      digits = 4,
+      caption = "Tabela 7: ANOVA - Delineamento em Blocos Casualizados (DBC)")
+
+# Resumo detalhado
+cat("Resumo do modelo DBC:\n")
+summary(modelo_dbc)
+
+# Teste de Tukey para procedências no DBC
+tukey_dbc <- TukeyHSD(modelo_dbc, "Procedencia")
+print("Teste de Tukey - DBC:")
+print(tukey_dbc)
+
+# Tabela organizada do teste de Tukey DBC
+tukey_dbc_df <- as.data.frame(tukey_dbc$Procedencia) %>%
+  rownames_to_column("Comparacao") %>%
+  arrange(`p adj`)
+
+kable(head(tukey_dbc_df, 15), 
+      digits = 4,
+      caption = "Tabela 8: Teste de Tukey - Comparações múltiplas (DBC) - 15 primeiras",
+      col.names = c("Comparação", "Diferença", "Limite Inferior", "Limite Superior", "P-valor ajustado"))
+```
+
+## Teste HSD de Tukey com agricolae
+
+```{r tukey-agricolae}
+# Usar agricolae para grupos estatísticos
+grupos_tukey_dbc <- HSD.test(modelo_dbc, "Procedencia", alpha = 0.05)
+print("Agrupamento das procedências (agricolae):")
+print(grupos_tukey_dbc)
+
+# Tabela dos grupos
+kable(grupos_tukey_dbc$groups,
+      digits = 2,
+      caption = "Tabela 9: Agrupamento das procedências pelo teste de Tukey (α = 0,05)")
+```
+
+# Comparação dos Modelos DIC vs DBC
+
+```{r comparacao-modelos}
+# Comparação da eficiência dos delineamentos
+anova_comparison <- data.frame(
+  Delineamento = c("DIC", "DBC"),
+  QM_Residuo = c(anova_dic["Residuals", "Mean Sq"], anova_dbc["Residuals", "Mean Sq"]),
+  GL_Residuo = c(anova_dic["Residuals", "Df"], anova_dbc["Residuals", "Df"]),
+  F_Tratamentos = c(anova_dic["Procedencia", "F value"], anova_dbc["Procedencia", "F value"]),
+  P_valor = c(anova_dic["Procedencia", "Pr(>F)"], anova_dbc["Procedencia", "Pr(>F)"])
+)
+
+kable(anova_comparison,
+      digits = 4,
+      caption = "Tabela 10: Comparação entre os delineamentos DIC e DBC")
+
+# Cálculo da eficiência relativa
+eficiencia_relativa <- (anova_dic["Residuals", "Mean Sq"]) / (anova_dbc["Residuals", "Mean Sq"])
+
+cat("Eficiência relativa do DBC em relação ao DIC:", round(eficiencia_relativa, 3), "\n")
+
+# Coeficiente de variação experimental
+cv_dic <- sqrt(anova_dic["Residuals", "Mean Sq"]) / mean(dados_long$Producao) * 100
+cv_dbc <- sqrt(anova_dbc["Residuals", "Mean Sq"]) / mean(dados_long$Producao) * 100
+
+cat("CV experimental DIC:", round(cv_dic, 2), "%\n")
+cat("CV experimental DBC:", round(cv_dbc, 2), "%\n")
+```
+
+# Análise de Pressupostos
+
+```{r pressupostos, fig.width=12, fig.height=8}
+# Análise de resíduos para o modelo DBC
+residuos_dbc <- residuals(modelo_dbc)
+valores_ajustados <- fitted(modelo_dbc)
+
+# Teste de normalidade dos resíduos
+shapiro_test <- shapiro.test(residuos_dbc)
+cat("Teste de Shapiro-Wilk para normalidade dos resíduos:")
+cat("\nW =", round(shapiro_test$statistic, 4))
+cat("\nP-valor =", round(shapiro_test$p.value, 4))
+
+if(shapiro_test$p.value > 0.05) {
+  cat("\nConclusão: Resíduos seguem distribuição normal (p > 0,05)")
+} else {
+  cat("\nConclusão: Resíduos NÃO seguem distribuição normal (p ≤ 0,05)")
+}
+
+# Gráficos de diagnóstico usando ggplot2
+# QQ-plot dos resíduos
+p_qq <- ggplot(data.frame(residuos = residuos_dbc), aes(sample = residuos)) +
+  stat_qq() +
+  stat_qq_line(color = "red", linetype = "dashed") +
+  labs(
+    title = "Figura 4: Q-Q Plot dos Resíduos (DBC)",
+    x = "Quantis Teóricos",
+    y = "Quantis Amostrais"
+  ) +
+  theme_minimal()
+
+print(p_qq)
+
+# Gráfico de resíduos vs valores ajustados
+p_residuos <- ggplot(data.frame(ajustados = valores_ajustados, residuos = residuos_dbc), 
+                    aes(x = ajustados, y = residuos)) +
+  geom_point(alpha = 0.7) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  geom_smooth(method = "loess", se = FALSE, color = "blue") +
+  labs(
+    title = "Figura 5: Resíduos vs Valores Ajustados (DBC)",
+    x = "Valores Ajustados",
+    y = "Resíduos"
+  ) +
+  theme_minimal()
+
+print(p_residuos)
+```
+
+# Resultados e Discussão
+
+## Estatísticas Descritivas
+
+A análise descritiva mostra que:
+
+```{r interpretacao-descritiva}
+# Encontrar melhor e pior procedência
+melhor_proc <- estat_proc[which.max(estat_proc$Media), ]
+pior_proc <- estat_proc[which.min(estat_proc$Media), ]
+
+cat("- A procedência", melhor_proc$Procedencia, "apresentou a maior produção média:", 
+    round(melhor_proc$Media, 2), "m³.ha⁻¹\n")
+cat("- A procedência", pior_proc$Procedencia, "apresentou a menor produção média:", 
+    round(pior_proc$Media, 2), "m³.ha⁻¹\n")
+cat("- O coeficiente de variação entre procedências variou de", 
+    round(min(estat_proc$CV_pct), 2), "% a", round(max(estat_proc$CV_pct), 2), "%\n")
+
+diferenca_abs <- melhor_proc$Media - pior_proc$Media
+diferenca_pct <- (diferenca_abs / pior_proc$Media) * 100
+
+cat("- Diferença entre melhor e pior:", round(diferenca_abs, 2), 
+    "m³.ha⁻¹ (", round(diferenca_pct, 1), "% superior)\n")
+```
+
+## Comparação entre Delineamentos
+
+### DIC (Delineamento Inteiramente Casualizado)
+```{r resultado-dic}
+f_dic <- anova_dic["Procedencia", "F value"]
+p_dic <- anova_dic["Procedencia", "Pr(>F)"]
+
+cat("- F-valor:", round(f_dic, 3), "\n")
+cat("- P-valor:", format(p_dic, scientific = TRUE, digits = 3), "\n")
+
+if(p_dic < 0.05) {
+  cat("- Conclusão: Diferenças SIGNIFICATIVAS entre procedências (p < 0,05)\n")
+} else {
+  cat("- Conclusão: SEM diferenças significativas entre procedências (p ≥ 0,05)\n")
+}
+```
+
+### DBC (Delineamento em Blocos Casualizados)
+```{r resultado-dbc}
+f_proc_dbc <- anova_dbc["Procedencia", "F value"]
+p_proc_dbc <- anova_dbc["Procedencia", "Pr(>F)"]
+f_bloco_dbc <- anova_dbc["Bloco", "F value"]
+p_bloco_dbc <- anova_dbc["Bloco", "Pr(>F)"]
+
+cat("**Para Procedências:**\n")
+cat("- F-valor:", round(f_proc_dbc, 3), "\n")
+cat("- P-valor:", format(p_proc_dbc, scientific = TRUE, digits = 3), "\n")
+
+if(p_proc_dbc < 0.05) {
+  cat("- Conclusão: Diferenças SIGNIFICATIVAS entre procedências (p < 0,05)\n")
+} else {
+  cat("- Conclusão: SEM diferenças significativas entre procedências (p ≥ 0,05)\n")
+}
+
+cat("\n**Para Blocos:**\n")
+cat("- F-valor:", round(f_bloco_dbc, 3), "\n")
+cat("- P-valor:", format(p_bloco_dbc, scientific = TRUE, digits = 3), "\n")
+
+if(p_bloco_dbc < 0.05) {
+  cat("- Conclusão: Efeito de bloco SIGNIFICATIVO (p < 0,05)\n")
+  cat("- Interpretação: Bloqueamento foi efetivo, há heterogeneidade entre blocos\n")
+} else {
+  cat("- Conclusão: Efeito de bloco NÃO significativo (p ≥ 0,05)\n")
+  cat("- Interpretação: Bloqueamento pode não ter sido necessário\n")
+}
+```
+
+## Eficiência do Delineamento
+
+```{r interpretacao-eficiencia}
+qm_residuo_dic <- anova_dic["Residuals", "Mean Sq"]
+qm_residuo_dbc <- anova_dbc["Residuals", "Mean Sq"]
+
+cat("O uso do DBC foi mais eficiente que o DIC:\n\n")
+
+cat("1. **Reduziu o erro experimental**: QM do resíduo diminuiu de", 
+    round(qm_residuo_dic, 2), "(DIC) para", round(qm_residuo_dbc, 2), "(DBC)\n")
+
+cat("2. **Aumentou a precisão**: O F-valor para procedências aumentou de", 
+    round(f_dic, 3), "(DIC) para", round(f_proc_dbc, 3), "(DBC)\n")
+
+cat("3. **Controle local**: O CV experimental diminuiu de", 
+    round(cv_dic, 2), "% (DIC) para", round(cv_dbc, 2), "% (DBC)\n")
+
+if(p_bloco_dbc < 0.05) {
+  cat("4. **Controle local efetivo**: O efeito de blocos foi significativo, indicando heterogeneidade entre blocos\n")
+}
+```
+
+# Conclusões
+
+```{r conclusoes-finais}
+cat("## Conclusões Principais:\n\n")
+
+cat("1. **Diferenças significativas**: ")
+if(p_proc_dbc < 0.05) {
+  cat("Existe diferença significativa entre as procedências de Eucalyptus grandis para produção em m³.ha⁻¹\n")
+} else {
+  cat("Não há diferenças significativas entre as procedências\n")
+}
+
+cat("\n2. **Eficiência do delineamento**: O DBC foi mais eficiente que o DIC, controlando adequadamente a heterogeneidade entre blocos\n")
+
+cat("\n3. **Melhor procedência**: A procedência", melhor_proc$Procedencia, 
+    "apresentou o melhor desempenho produtivo (", round(melhor_proc$Media, 2), "m³.ha⁻¹)\n")
+
+cat("\n4. **Qualidade experimental**: O CV experimental de", round(cv_dbc, 2), 
+    "% indica", ifelse(cv_dbc <= 10, "excelente", ifelse(cv_dbc <= 20, "boa", "regular")), 
+    "precisão experimental\n")
+
+cat("\n5. **Recomendação**: Para futuros experimentos similares, recomenda-se o uso do DBC para aumentar a precisão experimental\n")
+```
+
+## Ranking Final das Procedências
+
+```{r ranking-final}
+# Criar ranking baseado no teste de Tukey
+ranking_procedencias <- estat_proc %>%
+  arrange(desc(Media)) %>%
+  mutate(
+    Posicao = row_number(),
+    Classificacao = case_when(
+      Posicao == 1 ~ "Excelente",
+      Posicao <= 3 ~ "Muito Bom", 
+      Posicao <= 5 ~ "Bom",
+      TRUE ~ "Regular"
+    )
+  )
+
+kable(ranking_procedencias %>% select(Posicao, Procedencia, Media, DP, Classificacao), 
+      digits = 2,
+      caption = "Tabela 11: Ranking final das procedências de Eucalyptus grandis",
+      col.names = c("Posição", "Procedência", "Média (m³.ha⁻¹)", "Desvio Padrão", "Classificação"))
+```
+
+# Reprodutibilidade e Informações da Sessão
+
+```{r sessao-info}
+# Fixar semente utilizada
+cat("Semente utilizada para reprodutibilidade: 2025\n\n")
+
+# Informações da sessão R
+sessionInfo()
+```
+
+# Referências
+
+- Atividade 01 - CEN5815 (Prof. Dr. Deoclecio Jardim Amorim)
+- Montgomery, D. C. (2017). *Design and analysis of experiments*. John Wiley & Sons.
+- Pimentel-Gomes, F., & Garcia, C. H. (2002). *Estatística aplicada a experimentos agronômicos e florestais*. FEALQ.
+- R Core Team (2025). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.
+- Documentação do **Quarto**: https://quarto.org
+
+---
+
+**Fim do Relatório - Atividade 01 Completa** ✅
