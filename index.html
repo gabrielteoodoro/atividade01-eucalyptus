@@ -1,790 +1,455 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análise de Produção de Eucalyptus grandis - Atividade 01</title>
-    <meta name="description" content="Análise estatística completa de experimento com Eucalyptus grandis usando ANOVA">
-    <meta name="author" content="CEN5815 - Análise de Dados Agronômicos">
-    
-    <!-- Bootstrap CSS via CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    
-    <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.6;
-            color: #2c3e50;
-        }
-        
-        .hero-section {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 3rem 0;
-            margin-bottom: 2rem;
-        }
-        
-        .hero-section h1 {
-            font-size: 2.5rem;
-            font-weight: 300;
-            margin-bottom: 1rem;
-        }
-        
-        .hero-section p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        
-        .section-card {
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-            overflow: hidden;
-        }
-        
-        .section-header {
-            background: #f8f9fa;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid #dee2e6;
-        }
-        
-        .section-header h2 {
-            margin: 0;
-            color: var(--primary-color);
-            font-size: 1.5rem;
-        }
-        
-        .section-content {
-            padding: 1.5rem;
-        }
-        
-        .table-container {
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
-        
-        .table {
-            font-size: 0.9rem;
-        }
-        
-        .table thead th {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            font-weight: 600;
-            text-align: center;
-        }
-        
-        .table tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .numero {
-            font-family: 'Monaco', 'Consolas', monospace;
-            font-weight: 500;
-            text-align: center;
-        }
-        
-        .resultado-destaque {
-            color: var(--secondary-color);
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-        
-        .alert-resultado {
-            border-left: 4px solid var(--success-color);
-            background: #d4edda;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-        
-        .estatistica-card {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        
-        .estatistica-valor {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--secondary-color);
-            display: block;
-        }
-        
-        .ranking-item {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem;
-            margin: 0.5rem 0;
-            border-radius: 6px;
-            background: #f8f9fa;
-            border-left: 4px solid var(--secondary-color);
-        }
-        
-        .ranking-position {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-right: 1rem;
-            min-width: 2rem;
-        }
-        
-        .toc-sidebar {
-            position: sticky;
-            top: 2rem;
-            height: fit-content;
-        }
-        
-        .toc-link {
-            color: var(--primary-color);
-            text-decoration: none;
-            display: block;
-            padding: 0.5rem 0.75rem;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-        
-        .toc-link:hover {
-            background: #e9ecef;
-            text-decoration: none;
-            color: var(--secondary-color);
-        }
-        
-        .badge-significativo {
-            background-color: var(--success-color);
-        }
-        
-        .badge-excelente {
-            background-color: var(--success-color);
-        }
-        
-        @media (max-width: 992px) {
-            .toc-sidebar {
-                position: static;
-                margin-bottom: 2rem;
-            }
-        }
-        
-        .github-badge {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 1000;
-        }
-    </style>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nome do Estudante">
+
+<title>Análise de Produção de Eucalyptus grandis - Atividade 01</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
+
 </head>
+
 <body>
-    <!-- GitHub Badge -->
-    <div class="github-badge">
-        <span class="badge bg-primary">
-            <i class="bi bi-github"></i> GitHub Pages Demo
-        </span>
-    </div>
 
-    <!-- Hero Section -->
-    <div class="hero-section">
-        <div class="container">
-            <div class="text-center">
-                <h1><i class="bi bi-tree"></i> Análise de Produção de Eucalyptus grandis</h1>
-                <p class="lead">Atividade 01 - Análise de Variância (ANOVA)</p>
-                <p>CEN5815 - Análise de Dados Agronômicos e Ambientais (2025)</p>
-                <p>Prof. Dr. Deoclecio Jardim Amorim</p>
-                <div class="mt-3">
-                    <span class="badge bg-light text-dark me-2">7 Procedências</span>
-                    <span class="badge bg-light text-dark me-2">4 Blocos</span>
-                    <span class="badge bg-light text-dark">28 Parcelas</span>
-                </div>
-            </div>
-        </div>
-    </div>
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a>
+  <ul class="collapse">
+  <li><a href="#objetivo" id="toc-objetivo" class="nav-link" data-scroll-target="#objetivo">Objetivo</a></li>
+  </ul></li>
+  <li><a href="#preparação-dos-dados" id="toc-preparação-dos-dados" class="nav-link" data-scroll-target="#preparação-dos-dados">Preparação dos Dados</a></li>
+  <li><a href="#análise-descritiva" id="toc-análise-descritiva" class="nav-link" data-scroll-target="#análise-descritiva">Análise Descritiva</a></li>
+  <li><a href="#análise-de-variância-dic" id="toc-análise-de-variância-dic" class="nav-link" data-scroll-target="#análise-de-variância-dic">Análise de Variância (DIC)</a></li>
+  <li><a href="#análise-de-variância-dbc" id="toc-análise-de-variância-dbc" class="nav-link" data-scroll-target="#análise-de-variância-dbc">Análise de Variância (DBC)</a></li>
+  <li><a href="#comparação-múltipla-teste-de-tukey" id="toc-comparação-múltipla-teste-de-tukey" class="nav-link" data-scroll-target="#comparação-múltipla-teste-de-tukey">Comparação Múltipla - Teste de Tukey</a></li>
+  <li><a href="#comparação-entre-delineamentos" id="toc-comparação-entre-delineamentos" class="nav-link" data-scroll-target="#comparação-entre-delineamentos">Comparação entre Delineamentos</a></li>
+  <li><a href="#conclusões" id="toc-conclusões" class="nav-link" data-scroll-target="#conclusões">Conclusões</a></li>
+  <li><a href="#reprodutibilidade-e-sessão" id="toc-reprodutibilidade-e-sessão" class="nav-link" data-scroll-target="#reprodutibilidade-e-sessão">Reprodutibilidade e sessão</a></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
+<main class="content" id="quarto-document-content">
 
-    <div class="container-fluid">
-        <div class="row">
-            <!-- TOC Sidebar -->
-            <div class="col-lg-3">
-                <div class="toc-sidebar">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0"><i class="bi bi-list"></i> Índice</h5>
-                        </div>
-                        <div class="card-body p-2">
-                            <nav>
-                                <a href="#introducao" class="toc-link">Introdução</a>
-                                <a href="#dados" class="toc-link">Dados Experimentais</a>
-                                <a href="#descritiva" class="toc-link">Análise Descritiva</a>
-                                <a href="#anova" class="toc-link">ANOVA - DBC</a>
-                                <a href="#resultados" class="toc-link">Resultados</a>
-                                <a href="#ranking" class="toc-link">Ranking</a>
-                                <a href="#conclusoes" class="toc-link">Conclusões</a>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Análise de Produção de Eucalyptus grandis - Atividade 01</h1>
+</div>
 
-            <!-- Main Content -->
-            <div class="col-lg-9">
-                <!-- Introdução -->
-                <div id="introducao" class="section-card">
-                    <div class="section-header">
-                        <h2><i class="bi bi-info-circle"></i> Introdução</h2>
-                    </div>
-                    <div class="section-content">
-                        <p class="lead">Este relatório apresenta a análise estatística completa de um experimento com <strong>4 blocos casualizados</strong> e <strong>7 procedências</strong> de <em>Eucalyptus grandis</em>.</p>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="alert alert-info">
-                                    <h6><i class="bi bi-target"></i> Objetivos:</h6>
-                                    <ul class="mb-0">
-                                        <li>Análise descritiva dos dados</li>
-                                        <li>ANOVA DIC e DBC</li>
-                                        <li>Comparação de eficácia</li>
-                                        <li>Teste de Tukey</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="alert alert-secondary">
-                                    <h6><i class="bi bi-clipboard-data"></i> Características:</h6>
-                                    <ul class="mb-0">
-                                        <li><strong>Variável:</strong> Produção (m³.ha⁻¹)</li>
-                                        <li><strong>Tratamentos:</strong> 7 procedências</li>
-                                        <li><strong>Delineamento:</strong> Blocos casualizados</li>
-                                        <li><strong>Repetições:</strong> 4 blocos</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Dados Experimentais -->
-                <div id="dados" class="section-card">
-                    <div class="section-header">
-                        <h2><i class="bi bi-table"></i> Dados Experimentais</h2>
-                    </div>
-                    <div class="section-content">
-                        <div class="table-container">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Bloco / Procedência</th>
-                                        <th>P1</th>
-                                        <th>P2</th>
-                                        <th>P3</th>
-                                        <th>P4</th>
-                                        <th>P5</th>
-                                        <th>P6</th>
-                                        <th>P7</th>
-                                        <th><strong>Total</strong></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>Bloco I</strong></td>
-                                        <td class="numero">358</td>
-                                        <td class="numero">284</td>
-                                        <td class="numero">273</td>
-                                        <td class="numero">284</td>
-                                        <td class="numero">258</td>
-                                        <td class="numero">249</td>
-                                        <td class="numero">318</td>
-                                        <td class="numero resultado-destaque">2.024</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Bloco II</strong></td>
-                                        <td class="numero">380</td>
-                                        <td class="numero">249</td>
-                                        <td class="numero">222</td>
-                                        <td class="numero">242</td>
-                                        <td class="numero">263</td>
-                                        <td class="numero">217</td>
-                                        <td class="numero">312</td>
-                                        <td class="numero resultado-destaque">1.885</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Bloco III</strong></td>
-                                        <td class="numero">353</td>
-                                        <td class="numero">259</td>
-                                        <td class="numero">236</td>
-                                        <td class="numero">266</td>
-                                        <td class="numero">242</td>
-                                        <td class="numero">267</td>
-                                        <td class="numero">327</td>
-                                        <td class="numero resultado-destaque">1.950</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Bloco IV</strong></td>
-                                        <td class="numero">360</td>
-                                        <td class="numero">242</td>
-                                        <td class="numero">226</td>
-                                        <td class="numero">252</td>
-                                        <td class="numero">231</td>
-                                        <td class="numero">220</td>
-                                        <td class="numero">319</td>
-                                        <td class="numero resultado-destaque">1.850</td>
-                                    </tr>
-                                    <tr class="table-warning">
-                                        <td><strong>Total</strong></td>
-                                        <td class="numero resultado-destaque">1.451</td>
-                                        <td class="numero resultado-destaque">1.034</td>
-                                        <td class="numero resultado-destaque">957</td>
-                                        <td class="numero resultado-destaque">1.044</td>
-                                        <td class="numero resultado-destaque">994</td>
-                                        <td class="numero resultado-destaque">953</td>
-                                        <td class="numero resultado-destaque">1.276</td>
-                                        <td class="numero resultado-destaque"><strong>7.709</strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                        <div class="alert alert-success">
-                            <i class="bi bi-check-circle"></i>
-                            <strong>Verificação:</strong> Todos os totais conferem com a tabela original da Atividade01.pdf
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Análise Descritiva -->
-                <div id="descritiva" class="section-card">
-                    <div class="section-header">
-                        <h2><i class="bi bi-bar-chart"></i> Análise Descritiva</h2>
-                    </div>
-                    <div class="section-content">
-                        <div class="row mb-4">
-                            <div class="col-md-4">
-                                <div class="estatistica-card">
-                                    <span class="estatistica-valor">275.32</span>
-                                    <small>Média Geral (m³.ha⁻¹)</small>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="estatistica-card">
-                                    <span class="estatistica-valor">124.5</span>
-                                    <small>Diferença P1-P6 (m³.ha⁻¹)</small>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="estatistica-card">
-                                    <span class="estatistica-valor">52.3%</span>
-                                    <small>P1 Superior a P6</small>
-                                </div>
-                            </div>
-                        </div>
+<div class="quarto-title-meta">
 
-                        <h5><i class="bi bi-graph-up"></i> Estatísticas por Procedência</h5>
-                        <div class="table-container">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Procedência</th>
-                                        <th>Média</th>
-                                        <th>Desvio Padrão</th>
-                                        <th>Mínimo</th>
-                                        <th>Máximo</th>
-                                        <th>CV (%)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>P1</strong></td>
-                                        <td class="numero">362.75</td>
-                                        <td class="numero">12.97</td>
-                                        <td class="numero">353</td>
-                                        <td class="numero">380</td>
-                                        <td class="numero">3.58</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>P2</strong></td>
-                                        <td class="numero">258.50</td>
-                                        <td class="numero">19.12</td>
-                                        <td class="numero">242</td>
-                                        <td class="numero">284</td>
-                                        <td class="numero">7.40</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>P3</strong></td>
-                                        <td class="numero">239.25</td>
-                                        <td class="numero">22.95</td>
-                                        <td class="numero">222</td>
-                                        <td class="numero">273</td>
-                                        <td class="numero">9.59</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>P4</strong></td>
-                                        <td class="numero">261.00</td>
-                                        <td class="numero">18.76</td>
-                                        <td class="numero">242</td>
-                                        <td class="numero">284</td>
-                                        <td class="numero">7.19</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>P5</strong></td>
-                                        <td class="numero">248.50</td>
-                                        <td class="numero">13.70</td>
-                                        <td class="numero">231</td>
-                                        <td class="numero">263</td>
-                                        <td class="numero">5.51</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>P6</strong></td>
-                                        <td class="numero">238.25</td>
-                                        <td class="numero">24.27</td>
-                                        <td class="numero">217</td>
-                                        <td class="numero">267</td>
-                                        <td class="numero">10.19</td>
-                                    </tr>
-                                    <tr class="table-success">
-                                        <td><strong>P7</strong></td>
-                                        <td class="numero resultado-destaque">319.00</td>
-                                        <td class="numero">6.68</td>
-                                        <td class="numero">312</td>
-                                        <td class="numero">327</td>
-                                        <td class="numero">2.09</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ANOVA -->
-                <div id="anova" class="section-card">
-                    <div class="section-header">
-                        <h2><i class="bi bi-calculator"></i> ANOVA - Delineamento em Blocos Casualizados (DBC)</h2>
-                    </div>
-                    <div class="section-content">
-                        <div class="table-container">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Fonte de Variação</th>
-                                        <th>GL</th>
-                                        <th>SQ</th>
-                                        <th>QM</th>
-                                        <th>F calculado</th>
-                                        <th>Significância</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="table-warning">
-                                        <td><strong>Procedências</strong></td>
-                                        <td class="numero">6</td>
-                                        <td class="numero">53,915.86</td>
-                                        <td class="numero">8,985.98</td>
-                                        <td class="numero resultado-destaque">40.05</td>
-                                        <td><span class="badge badge-significativo">p &lt; 0.001</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Blocos</strong></td>
-                                        <td class="numero">3</td>
-                                        <td class="numero">2,529.96</td>
-                                        <td class="numero">843.32</td>
-                                        <td class="numero">3.75</td>
-                                        <td><span class="badge bg-success">p &lt; 0.05</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Resíduo</strong></td>
-                                        <td class="numero">18</td>
-                                        <td class="numero">4,045.43</td>
-                                        <td class="numero">224.64</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr class="table-info">
-                                        <td><strong>Total</strong></td>
-                                        <td class="numero">27</td>
-                                        <td class="numero">60,491.25</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <div class="alert alert-resultado">
-                                    <h6><i class="bi bi-trophy"></i> Teste F para Procedências</h6>
-                                    <p class="mb-1"><strong>F calculado:</strong> <span class="resultado-destaque">40.05</span></p>
-                                    <p class="mb-1"><strong>P-valor:</strong> &lt; 0.001</p>
-                                    <p class="mb-0"><strong>Conclusão:</strong> <span class="badge bg-success">ALTAMENTE SIGNIFICATIVO</span></p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="alert alert-resultado">
-                                    <h6><i class="bi bi-grid"></i> Teste F para Blocos</h6>
-                                    <p class="mb-1"><strong>F calculado:</strong> <span class="resultado-destaque">3.75</span></p>
-                                    <p class="mb-1"><strong>P-valor:</strong> &lt; 0.05</p>
-                                    <p class="mb-0"><strong>Conclusão:</strong> <span class="badge bg-success">SIGNIFICATIVO</span></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="alert alert-info mt-3">
-                            <h6><i class="bi bi-info-circle"></i> Interpretação:</h6>
-                            <ul class="mb-0">
-                                <li><strong>Procedências:</strong> Existem diferenças significativas entre as procedências</li>
-                                <li><strong>Blocos:</strong> O controle local foi efetivo - há heterogeneidade entre blocos</li>
-                                <li><strong>CV Experimental:</strong> 5.43% - <span class="badge badge-excelente">EXCELENTE PRECISÃO</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Resultados -->
-                <div id="resultados" class="section-card">
-                    <div class="section-header">
-                        <h2><i class="bi bi-graph-up-arrow"></i> Resultados Principais</h2>
-                    </div>
-                    <div class="section-content">
-                        <div class="row mb-4">
-                            <div class="col-md-4">
-                                <div class="card bg-success text-white">
-                                    <div class="card-body text-center">
-                                        <h3 class="card-title">P1</h3>
-                                        <p class="card-text">Melhor Procedência</p>
-                                        <h4>362.75 m³.ha⁻¹</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card bg-primary text-white">
-                                    <div class="card-body text-center">
-                                        <h3 class="card-title">5.43%</h3>
-                                        <p class="card-text">CV Experimental</p>
-                                        <h4>Excelente Precisão</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card bg-info text-white">
-                                    <div class="card-body text-center">
-                                        <h3 class="card-title">52.3%</h3>
-                                        <p class="card-text">P1 Superior a P6</p>
-                                        <h4>+124.5 m³.ha⁻¹</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Ranking -->
-                <div id="ranking" class="section-card">
-                    <div class="section-header">
-                        <h2><i class="bi bi-award"></i> Ranking das Procedências</h2>
-                    </div>
-                    <div class="section-content">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="ranking-item" style="border-left-color: #FFD700;">
-                                    <span class="ranking-position">1º</span>
-                                    <div>
-                                        <strong>P1 - Excelente</strong><br>
-                                        <span class="text-muted">362.75 m³.ha⁻¹</span>
-                                    </div>
-                                </div>
-                                <div class="ranking-item" style="border-left-color: #C0C0C0;">
-                                    <span class="ranking-position">2º</span>
-                                    <div>
-                                        <strong>P7 - Muito Bom</strong><br>
-                                        <span class="text-muted">319.00 m³.ha⁻¹</span>
-                                    </div>
-                                </div>
-                                <div class="ranking-item" style="border-left-color: #CD7F32;">
-                                    <span class="ranking-position">3º</span>
-                                    <div>
-                                        <strong>P4 - Bom</strong><br>
-                                        <span class="text-muted">261.00 m³.ha⁻¹</span>
-                                    </div>
-                                </div>
-                                <div class="ranking-item">
-                                    <span class="ranking-position">4º</span>
-                                    <div>
-                                        <strong>P2 - Regular</strong><br>
-                                        <span class="text-muted">258.50 m³.ha⁻¹</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="ranking-item">
-                                    <span class="ranking-position">5º</span>
-                                    <div>
-                                        <strong>P5 - Regular</strong><br>
-                                        <span class="text-muted">248.50 m³.ha⁻¹</span>
-                                    </div>
-                                </div>
-                                <div class="ranking-item">
-                                    <span class="ranking-position">6º</span>
-                                    <div>
-                                        <strong>P3 - Baixo</strong><br>
-                                        <span class="text-muted">239.25 m³.ha⁻¹</span>
-                                    </div>
-                                </div>
-                                <div class="ranking-item" style="border-left-color: #dc3545;">
-                                    <span class="ranking-position">7º</span>
-                                    <div>
-                                        <strong>P6 - Muito Baixo</strong><br>
-                                        <span class="text-muted">238.25 m³.ha⁻¹</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Conclusões -->
-                <div id="conclusoes" class="section-card">
-                    <div class="section-header">
-                        <h2><i class="bi bi-check2-square"></i> Conclusões</h2>
-                    </div>
-                    <div class="section-content">
-                        <div class="alert alert-success">
-                            <h5><i class="bi bi-clipboard-check"></i> Principais Conclusões:</h5>
-                            <ul class="mb-0">
-                                <li><strong>Diferenças significativas:</strong> Existe diferença significativa entre as procedências de <em>Eucalyptus grandis</em> para produção</li>
-                                <li><strong>Melhor procedência:</strong> P1 apresentou o melhor desempenho produtivo (362.75 m³.ha⁻¹)</li>
-                                <li><strong>Controle local efetivo:</strong> O delineamento em blocos foi eficiente</li>
-                                <li><strong>Qualidade experimental:</strong> CV de 5.43% indica excelente precisão</li>
-                                <li><strong>Recomendação:</strong> Usar DBC em futuros experimentos similares</li>
-                            </ul>
-                        </div>
-
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-header bg-primary text-white">
-                                        <h6 class="mb-0"><i class="bi bi-building"></i> Para Plantios Comerciais</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <ul class="mb-0">
-                                            <li>Priorizar procedência <strong>P1</strong></li>
-                                            <li>Considerar top 3 para diversificação</li>
-                                            <li>Evitar procedências P6 e P3</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-header bg-success text-white">
-                                        <h6 class="mb-0"><i class="bi bi-flask"></i> Para Futuros Experimentos</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <ul class="mb-0">
-                                            <li>Manter delineamento em blocos</li>
-                                            <li>Considerar fatores ambientais</li>
-                                            <li>Avaliar interação procedência × ambiente</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Informações da Sessão -->
-                <div class="section-card">
-                    <div class="section-header">
-                        <h2><i class="bi bi-gear"></i> Informações Técnicas</h2>
-                    </div>
-                    <div class="section-content">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h6>Metodologia:</h6>
-                                <ul>
-                                    <li><strong>Análise:</strong> ANOVA (DBC)</li>
-                                    <li><strong>Software:</strong> R + Quarto</li>
-                                    <li><strong>Significância:</strong> α = 0.05</li>
-                                    <li><strong>Semente:</strong> 2025</li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <h6>Dados do Experimento:</h6>
-                                <ul>
-                                    <li><strong>Variável:</strong> Produção (m³.ha⁻¹)</li>
-                                    <li><strong>Média geral:</strong> 275.32 m³.ha⁻¹</li>
-                                    <li><strong>Erro experimental:</strong> 14.99 m³.ha⁻¹</li>
-                                    <li><strong>Precisão:</strong> CV = 5.43%</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <hr>
-                        
-                        <h6>Referências:</h6>
-                        <ul class="mb-0">
-                            <li>Atividade 01 - CEN5815 (Prof. Dr. Deoclecio Jardim Amorim)</li>
-                            <li>Montgomery, D. C. (2017). <em>Design and analysis of experiments</em>. John Wiley & Sons.</li>
-                            <li>Pimentel-Gomes, F., & Garcia, C. H. (2002). <em>Estatística aplicada a experimentos agronômicos e florestais</em>. FEALQ.</li>
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-4 mt-5">
-        <div class="container">
-            <p class="mb-0">
-                <strong>Atividade 01</strong> - CEN5815 - Análise de Dados Agronômicos e Ambientais (2025)<br>
-                <small>Relatório gerado automaticamente • Prof. Dr. Deoclecio Jardim Amorim</small>
-            </p>
-        </div>
-    </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div>
+    <div class="quarto-title-meta-heading">Autor</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nome do Estudante </p>
+          </div>
+  </div>
     
-    <!-- Smooth scrolling for navigation -->
-    <script>
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+    <div>
+    <div class="quarto-title-meta-heading">Data de Publicação</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">29 de agosto de 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
-        // Update active navigation link on scroll
-        window.addEventListener('scroll', function() {
-            let current = '';
-            const sections = document.querySelectorAll('.section-card[id]');
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (scrollY >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
-                }
-            });
 
-            document.querySelectorAll('.toc-link').forEach(link => {
-                link.classList.remove('bg-primary', 'text-white');
-                if (link.getAttribute('href').slice(1) === current) {
-                    link.classList.add('bg-primary', 'text-white');
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+</header>
+
+
+<section id="introdução" class="level1">
+<h1>Introdução</h1>
+<p>Este relatório apresenta a análise estatística de um experimento com <strong>4 blocos casualizados</strong> e <strong>7 procedências</strong> de <em>Eucalyptus grandis</em>, avaliando a produção em m³.ha⁻¹.</p>
+<p>O objetivo é comparar a eficácia dos tratamentos utilizando dois delineamentos experimentais: <strong>DIC</strong> e <strong>DBC</strong>.</p>
+<section id="objetivo" class="level2">
+<h2 class="anchored" data-anchor-id="objetivo">Objetivo</h2>
+<ul>
+<li>Realizar <strong>análise descritiva</strong> dos dados experimentais.</li>
+<li>Executar <strong>ANOVA</strong> considerando DIC e DBC.</li>
+<li>Comparar a <strong>eficácia dos tratamentos</strong> entre os dois delineamentos.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="preparação-dos-dados" class="level1">
+<h1>Preparação dos Dados</h1>
+<p>Carregamos os pacotes necessários e organizamos os dados experimentais:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregar pacotes necessários</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(agricolae)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dados do experimento (conforme tabela original)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dados_matriz <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">358</span>, <span class="dv">284</span>, <span class="dv">273</span>, <span class="dv">284</span>, <span class="dv">258</span>, <span class="dv">249</span>, <span class="dv">318</span>,  <span class="co"># Bloco I</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">380</span>, <span class="dv">249</span>, <span class="dv">222</span>, <span class="dv">242</span>, <span class="dv">263</span>, <span class="dv">217</span>, <span class="dv">312</span>,  <span class="co"># Bloco II</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="dv">353</span>, <span class="dv">259</span>, <span class="dv">236</span>, <span class="dv">266</span>, <span class="dv">242</span>, <span class="dv">267</span>, <span class="dv">327</span>,  <span class="co"># Bloco III</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="dv">360</span>, <span class="dv">242</span>, <span class="dv">226</span>, <span class="dv">252</span>, <span class="dv">231</span>, <span class="dv">220</span>, <span class="dv">319</span>   <span class="co"># Bloco IV</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>), <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Nomear linhas e colunas</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(dados_matriz) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"Bloco"</span>, <span class="fu">c</span>(<span class="st">"I"</span>, <span class="st">"II"</span>, <span class="st">"III"</span>, <span class="st">"IV"</span>))</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(dados_matriz) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"P"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Exibir matriz dos dados</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(dados_matriz)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        P1  P2  P3  P4  P5  P6  P7
+Bloco I 358 284 273 284 258 249 318
+Bloco II 380 249 222 242 263 217 312
+Bloco III 353 259 236 266 242 267 327
+Bloco IV 360 242 226 252 231 220 319</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformar em data frame longo</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dados_long <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">Bloco =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">Procedencia =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>dados_long<span class="sc">$</span>Producao <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(dados_matriz))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>dados_long<span class="sc">$</span>Bloco <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(dados_long<span class="sc">$</span>Bloco)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>dados_long<span class="sc">$</span>Procedencia <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(dados_long<span class="sc">$</span>Procedencia)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dados_long, <span class="dv">10</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Bloco Procedencia Producao
+1      1           1      358
+2      2           1      380
+3      3           1      353
+4      4           1      360
+5      1           2      284
+6      2           2      249
+7      3           2      259
+8      4           2      242
+9      1           3      273
+10     2           3      222</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="análise-descritiva" class="level1">
+<h1>Análise Descritiva</h1>
+<p>Calculamos as estatísticas descritivas para cada procedência:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estatísticas descritivas por procedência</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>descritiva <span class="ot">&lt;-</span> dados_long <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Procedencia) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Media =</span> <span class="fu">round</span>(<span class="fu">mean</span>(Producao), <span class="dv">2</span>),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Desvio =</span> <span class="fu">round</span>(<span class="fu">sd</span>(Producao), <span class="dv">2</span>),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Minimo =</span> <span class="fu">min</span>(Producao),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Maximo =</span> <span class="fu">max</span>(Producao),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">'drop'</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(descritiva)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 6
+  Procedencia     n Media Desvio Minimo Maximo
+  <fct>       <int> <dbl>  <dbl>  <dbl>  <dbl>
+1 1               4 363.   11.4     353    380
+2 2               4 259.   18.4     242    284
+3 3               4 239.   22.6     222    273
+4 4               4 261    17.1     242    284
+5 5               4 248.   13.3     231    263
+6 6               4 238.   21.8     217    267
+7 7               4 319    6.24     312    327</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico boxplot</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dados_long, <span class="fu">aes</span>(<span class="at">x =</span> Procedencia, <span class="at">y =</span> Producao)) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Produção por Procedência"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Procedência"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Produção (m³.ha⁻¹)"</span>) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+</div>
+<hr>
+</section>
+<section id="análise-de-variância-dic" class="level1">
+<h1>Análise de Variância (DIC)</h1>
+<p>Primeiro, analisamos os dados como <strong>Delineamento Inteiramente Casualizado</strong>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ANOVA para DIC</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>modelo_dic <span class="ot">&lt;-</span> <span class="fu">aov</span>(Producao <span class="sc">~</span> Procedencia, <span class="at">data =</span> dados_long)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>anova_dic <span class="ot">&lt;-</span> <span class="fu">summary</span>(modelo_dic)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova_dic)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Df Sum Sq Mean Sq F value   Pr(>F)    
+Procedencia  6  62742   10457   23.89 4.23e-08 ***
+Residuals   21   9194     438                     
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Coeficiente de variação DIC</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>qm_residuo_dic <span class="ot">&lt;-</span> anova_dic[[<span class="dv">1</span>]]<span class="sc">$</span><span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">2</span>]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>media_geral <span class="ot">&lt;-</span> <span class="fu">mean</span>(dados_long<span class="sc">$</span>Producao)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>cv_dic <span class="ot">&lt;-</span> (<span class="fu">sqrt</span>(qm_residuo_dic) <span class="sc">/</span> media_geral) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Coeficiente de Variação (DIC):"</span>, <span class="fu">round</span>(cv_dic, <span class="dv">2</span>), <span class="st">"%\n"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Coeficiente de Variação (DIC): 7.6 %</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="análise-de-variância-dbc" class="level1">
+<h1>Análise de Variância (DBC)</h1>
+<p>Agora, analisamos considerando o <strong>Delineamento em Blocos Casualizados</strong>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ANOVA para DBC</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>modelo_dbc <span class="ot">&lt;-</span> <span class="fu">aov</span>(Producao <span class="sc">~</span> Procedencia <span class="sc">+</span> Bloco, <span class="at">data =</span> dados_long)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>anova_dbc <span class="ot">&lt;-</span> <span class="fu">summary</span>(modelo_dbc)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova_dbc)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Df Sum Sq Mean Sq F value   Pr(>F)    
+Procedencia  6  62742   10457  40.054 1.32e-09 ***
+Bloco        3   2932     977   3.745   0.0303 *  
+Residuals   18   4701     261                     
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Coeficiente de variação DBC</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>qm_residuo_dbc <span class="ot">&lt;-</span> anova_dbc[[<span class="dv">1</span>]]<span class="sc">$</span><span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">3</span>]</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>cv_dbc <span class="ot">&lt;-</span> (<span class="fu">sqrt</span>(qm_residuo_dbc) <span class="sc">/</span> media_geral) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Coeficiente de Variação (DBC):"</span>, <span class="fu">round</span>(cv_dbc, <span class="dv">2</span>), <span class="st">"%\n"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Coeficiente de Variação (DBC): 5.43 %</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="comparação-múltipla-teste-de-tukey" class="level1">
+<h1>Comparação Múltipla - Teste de Tukey</h1>
+<p>Aplicamos o teste de Tukey para identificar quais procedências diferem entre si:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Teste de Tukey</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>tukey_result <span class="ot">&lt;-</span> <span class="fu">HSD.test</span>(modelo_dbc, <span class="st">"Procedencia"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tukey_result)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$statistics
+   MSerror Df     Mean       CV  t.value      HSD
+      261 18 275.3214 5.425991 2.100922 23.41769
+
+$parameters
+   test p.ajusted name.t ntr alpha
+  Tukey      none Procedencia   7  0.05
+
+$means
+  Producao std  r      LCL      UCL Min Max   Q25   Q50   Q75
+1   362.75  11 4 337.8877 387.6123 353 380 356.5 359.0 364.5
+2   258.50  18 4 233.6377 283.3623 242 284 246.5 254.0 267.5
+3   239.25  23 4 214.3877 264.1123 222 273 227.0 232.5 252.0
+4   261.00  17 4 236.1377 285.8623 242 284 246.0 259.0 274.5
+5   248.50  13 4 223.6377 273.3623 231 263 237.5 245.0 257.0
+6   238.25  22 4 213.3877 263.1123 217 267 221.5 231.0 259.0
+7   319.00   6 4 294.1377 343.8623 312 327 315.0 319.0 322.5
+
+$comparison
+NULL
+
+$groups
+  trt    means M
+1   1 362.7500 a
+7   7 319.0000 b
+4   4 261.0000 c
+2   2 258.5000 c
+5   5 248.5000 c
+3   3 239.2500 c
+6   6 238.2500 c
+
+attr(,"class")
+[1] "group"</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ranking das procedências</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>ranking <span class="ot">&lt;-</span> tukey_result<span class="sc">$</span>means</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>ranking <span class="ot">&lt;-</span> ranking[<span class="fu">order</span>(<span class="sc">-</span>ranking<span class="sc">$</span>Producao), ]</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>ranking<span class="sc">$</span>Procedencia <span class="ot">&lt;-</span> <span class="fu">rownames</span>(ranking)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Ranking das Procedências (m³.ha⁻¹):\n"</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(ranking)) {</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"%d. P%s: %.2f\n"</span>, i, ranking<span class="sc">$</span>Procedencia[i], ranking<span class="sc">$</span>Producao[i]))</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ranking das Procedências (m³.ha⁻¹):
+1. P1: 362.75
+2. P7: 319.00
+3. P4: 261.00
+4. P2: 258.50
+5. P5: 248.50
+6. P3: 239.25
+7. P6: 238.25</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="comparação-entre-delineamentos" class="level1">
+<h1>Comparação entre Delineamentos</h1>
+<p>Comparamos a eficácia dos dois delineamentos experimentais:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumo comparativo</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>comparacao <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Delineamento =</span> <span class="fu">c</span>(<span class="st">"DIC"</span>, <span class="st">"DBC"</span>),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">F_Procedencias =</span> <span class="fu">c</span>(<span class="fl">23.89</span>, <span class="fl">40.05</span>),</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_valor =</span> <span class="fu">c</span>(<span class="st">"< 0.001"</span>, <span class="st">"< 0.001"</span>),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">CV_percent =</span> <span class="fu">c</span>(<span class="fl">7.60</span>, <span class="fl">5.43</span>),</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">QM_Residuo =</span> <span class="fu">c</span>(<span class="fl">438</span>, <span class="dv">261</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(comparacao)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Delineamento F_Procedencias p_valor CV_percent QM_Residuo
+1          DIC           23.89  < 0.001       7.60        438
+2          DBC           40.05  < 0.001       5.43        261</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="conclusões" class="level1">
+<h1>Conclusões</h1>
+<p>Com base na análise estatística realizada, podemos concluir que:</p>
+<ul>
+<li><p><strong>Diferenças significativas:</strong> Existe diferença significativa entre as procedências de <em>Eucalyptus grandis</em> para produção em m³.ha⁻¹ (p &lt; 0,001).</p></li>
+<li><p><strong>Melhor procedência:</strong> P1 apresentou o melhor desempenho produtivo (362,75 m³.ha⁻¹), seguida por P7 (319,00 m³.ha⁻¹).</p></li>
+<li><p><strong>Eficácia do bloqueamento:</strong> O DBC foi mais eficiente que o DIC, demonstrado pela:</p>
+<ul>
+<li>Maior valor de F para procedências (40,05 vs 23,89)</li>
+<li>Menor coeficiente de variação (5,43% vs 7,60%)</li>
+<li>Menor quadrado médio do resíduo (261 vs 438)</li>
+</ul></li>
+<li><p><strong>Precisão experimental:</strong> CV = 5,43% indica excelente precisão experimental.</p></li>
+<li><p><strong>Recomendação:</strong> Para futuros experimentos similares, recomenda-se o uso do DBC devido ao controle mais efetivo da heterogeneidade ambiental.</p></li>
+</ul>
+<hr>
+</section>
+<section id="reprodutibilidade-e-sessão" class="level1">
+<h1>Reprodutibilidade e sessão</h1>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.4.2 (2024-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 22.04.4 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3;  LAPACK version 3.10.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: Etc/UTC
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] broom_1.0.7     agricolae_1.3-7 lubridate_1.9.4 forcats_1.0.0  
+ [5] stringr_1.5.1   dplyr_1.1.4     purrr_1.0.4     readr_2.1.5    
+ [9] tidyr_1.3.1     tibble_3.2.1    ggplot2_3.5.2   tidyverse_2.0.0
+
+loaded via a namespace (and not attached):
+ [1] utf8_1.2.4        generics_0.1.3    klaR_1.7-3       stringi_1.8.4    
+ [5] lattice_0.22-6    hms_1.1.3         digest_0.6.37     magrittr_2.0.3   
+ [9] combinat_0.0-8    timechange_0.3.0  evaluate_1.0.1    grid_4.4.2       
+[13] fastmap_1.2.0     jsonlite_1.8.9    AlgDesign_1.2.1   backports_1.5.0  
+[17] fansi_1.0.6       scales_1.3.0      textshaping_0.4.0 cli_3.6.3        
+[21] rlang_1.1.4       crayon_1.5.3      munsell_0.5.1     withr_3.0.2      
+[25] yaml_2.3.10       tools_4.4.2       tzdb_0.4.0        colorspace_2.1-1 
+[29] vctrs_0.6.5       R6_2.5.1          lifecycle_1.0.4   MASS_7.3-61      
+[33] cluster_2.1.6     pkgconfig_2.0.3   pillar_1.9.0      gtable_0.3.6     
+[37] glue_1.8.0        systemfonts_1.1.0 xfun_0.49         tidyselect_1.2.1 
+[41] rstudioapi_0.17.1 knitr_1.49        htmltools_0.5.8.1 rmarkdown_2.29   
+[45] compiler_4.4.2    ragg_1.3.3</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main>
+</div>
+
+
+</body></html>
