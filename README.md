@@ -1,101 +1,83 @@
-# 🌲 Atividade 01 - Análise de Produção de Eucalyptus grandis
+# Análise de Produção de Eucalyptus grandis - Atividade 01
 
-**Disciplina:** CEN5815 - Análise de Dados Agronômicos e Ambientais (2025)  
+**Disciplina:** CEN5815 - Análise de Dados Agronômicos e Ambientais  
 **Professor:** Prof. Dr. Deoclecio Jardim Amorim  
 **Data:** 29 de agosto de 2025
 
-## 📊 Visualizar Relatório
+## 📊 Relatório Final Online
 
-**🔗 [CLIQUE AQUI PARA VER O RELATÓRIO COMPLETO](https://gabrielteoodoro.github.io/atividade01-eucalyptus)**
+**🔗 [Ver Relatório Completo](https://gabrielteoodoro.github.io/atividade01-eucalyptus)**
 
-## 📋 Sobre o Experimento
+O relatório completo está publicado no GitHub Pages com análise estatística completa de um experimento com 4 blocos casualizados e 7 procedências de *Eucalyptus grandis*.
 
-Análise estatística completa de experimento com **4 blocos casualizados** e **7 procedências** de *Eucalyptus grandis*, avaliando a produção em m³.ha⁻¹.
+## 📁 Arquivos para Entrega
 
-### 🎯 Resultados Principais:
-- **F (Procedências):** 40.05 (p < 0.001) - ALTAMENTE SIGNIFICATIVO
-- **F (Blocos):** 3.75 (p < 0.05) - SIGNIFICATIVO  
-- **CV Experimental:** 5.43% - EXCELENTE PRECISÃO
-- **Melhor procedência:** P1 (362.75 m³.ha⁻¹)
+### **Pasta: `ATIVIDADE01_ENTREGA_FINAL/`**
 
-## 📁 Estrutura do Projeto
+**Arquivos principais para submissão:**
 
-### 🏆 Principal:
-- **[Relatório HTML](https://gabrielteoodoro.github.io/atividade01-eucalyptus)** - Visualização online
-- `src/relatorio_atividade01_corrigido.qmd` - Código Quarto fonte
-- `src/executar_analise_corrigido.R` - Script R completo
-- `src/instalar_pacotes.R` - Instalação automática de pacotes
+1. **`RELATORIO_PRINCIPAL.html`** - Relatório final renderizado (49KB)
+2. **`codigo_fonte.qmd`** - Código fonte Quarto (16KB) 
+3. **`executar_analise.R`** - Script R completo (11KB)
+4. **`INSTRUCOES.txt`** - Instruções de execução
 
-### 🐍 Alternativa Python:
-- `src/analise_python_puro.py` - Análise completa em Python
-- `src/gerar_relatorio_final.py` - Gerador de relatório HTML
+**Para entregar ao professor:**
+- Enviar o arquivo `RELATORIO_PRINCIPAL.html` 
+- Compactar a pasta completa como ZIP/RAR (conforme solicitado)
 
-### 📦 Entrega:
-- `entrega/` - Arquivos organizados para submissão
-- `reports/` - Relatórios HTML gerados
-- `data/` - Dados originais do experimento
+## 🔬 Análises Realizadas
 
-## 🚀 Como Usar
+### ✅ **Requisitos Atendidos:**
 
-### Opção 1: Visualizar Online
-[**Clique aqui para ver o relatório**](https://gabrielteoodoro.github.io/atividade01-eucalyptus)
+1. **Análise Descritiva** - Estatísticas por procedência e bloco
+2. **ANOVA DIC** - Delineamento Inteiramente Casualizado  
+3. **ANOVA DBC** - Delineamento em Blocos Casualizados
+4. **Teste de Tukey** - Comparações múltiplas
+5. **Comparação entre Delineamentos** - Eficiência DIC vs DBC
+6. **Relatório Quarto** - Formato HTML profissional
 
-### Opção 2: Executar no RStudio
+### 📈 **Principais Resultados:**
+
+- **F (Procedências):** 40.05 (p < 0.001) - Diferenças altamente significativas
+- **F (Blocos):** 3.75 (p < 0.05) - Efeito de bloco significativo  
+- **CV Experimental:** 5.43% (excelente precisão)
+- **Melhor Procedência:** P1 com 362.75 m³.ha⁻¹
+- **DBC superior ao DIC** - Maior eficiência experimental
+
+## 🛠️ Como Executar
+
+### **Opção 1: RStudio/Quarto**
 ```r
-# 1. Instalar pacotes
-source("src/instalar_pacotes.R")
+# Instalar dependências
+source("ATIVIDADE01_ENTREGA_FINAL/instalar_pacotes.R")
 
-# 2. Renderizar relatório  
-quarto::quarto_render("src/relatorio_atividade01_corrigido.qmd")
+# Renderizar relatório
+quarto::quarto_render("ATIVIDADE01_ENTREGA_FINAL/codigo_fonte.qmd")
 ```
 
-### Opção 3: Executar Python
-```bash
-python src/analise_python_puro.py
+### **Opção 2: R Console**
+```r
+# Executar análise completa
+source("ATIVIDADE01_ENTREGA_FINAL/executar_analise.R")
 ```
 
-## ✅ Análises Incluídas
+## 📊 Estrutura dos Dados
 
-- [x] Análise descritiva completa
-- [x] ANOVA DIC (Delineamento Inteiramente Casualizado)
-- [x] ANOVA DBC (Delineamento em Blocos Casualizados)  
-- [x] Comparação entre delineamentos
-- [x] Teste de Tukey para comparações múltiplas
-- [x] Gráficos e visualizações
-- [x] Análise de pressupostos
-- [x] Ranking das procedências
-- [x] Conclusões e recomendações
+**Experimento:** 4 blocos × 7 procedências = 28 parcelas  
+**Variável:** Produção em m³.ha⁻¹  
 
-## 🏅 Ranking das Procedências
+| Bloco/Proc | P1  | P2  | P3  | P4  | P5  | P6  | P7  | Total |
+|------------|-----|-----|-----|-----|-----|-----|-----|-------|
+| Bloco I    | 358 | 284 | 273 | 284 | 258 | 249 | 318 | 2.024 |
+| Bloco II   | 380 | 249 | 222 | 242 | 263 | 217 | 312 | 1.885 |
+| Bloco III  | 353 | 259 | 236 | 266 | 242 | 267 | 327 | 1.950 |
+| Bloco IV   | 360 | 242 | 226 | 252 | 231 | 220 | 319 | 1.850 |
+| **Total**  |**1.451**|**1.034**|**957**|**1.044**|**994**|**953**|**1.276**|**7.709**|
 
-1. **P1** - 362.75 m³.ha⁻¹ (Excelente)
-2. **P7** - 319.00 m³.ha⁻¹ (Muito Bom)  
-3. **P4** - 261.00 m³.ha⁻¹ (Bom)
-4. **P2** - 258.50 m³.ha⁻¹ (Regular)
-5. **P5** - 248.50 m³.ha⁻¹ (Regular)
-6. **P3** - 239.25 m³.ha⁻¹ (Baixo)
-7. **P6** - 238.25 m³.ha⁻¹ (Muito Baixo)
+## 🎯 Repositório GitHub
 
-## 📈 Dados Experimentais Verificados
-
-| Procedência | P1  | P2  | P3  | P4  | P5  | P6  | P7  | Total |
-|-------------|-----|-----|-----|-----|-----|-----|-----|-------|
-| Bloco I     | 358 | 284 | 273 | 284 | 258 | 249 | 318 | 2.024 |
-| Bloco II    | 380 | 249 | 222 | 242 | 263 | 217 | 312 | 1.885 |
-| Bloco III   | 353 | 259 | 236 | 266 | 242 | 267 | 327 | 1.950 |
-| Bloco IV    | 360 | 242 | 226 | 252 | 231 | 220 | 319 | 1.850 |
-| **Total**   |1.451|1.034| 957 |1.044| 994 | 953 |1.276| **7.709** |
-
-✅ Todos os totais conferem com a tabela original!
-
-## 🎓 Informações Acadêmicas
-
-**Curso:** Análise de Dados Agronômicos e Ambientais  
-**Código:** CEN5815  
-**Ano:** 2025  
-**Método:** ANOVA - Delineamento em Blocos Casualizados  
-**Software:** R + Quarto, Python (alternativo)  
+**🔗 [https://github.com/gabrielteoodoro/atividade01-eucalyptus](https://github.com/gabrielteoodoro/atividade01-eucalyptus)**
 
 ---
 
-**📊 [VER RELATÓRIO COMPLETO](https://gabrielteoodoro.github.io/atividade01-eucalyptus)**
+*Análise completa conforme requisitos da Atividade01.pdf*
