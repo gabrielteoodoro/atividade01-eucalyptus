@@ -6,27 +6,34 @@
 
 ---
 
-## 🔥 **VISUALIZAR RELATÓRIO COMPLETO**
+## 📋 **RELATÓRIOS DISPONÍVEIS**
 
-### 📋 **[🚀 RELATÓRIO INTERATIVO ONLINE](https://gabrielteoodoro.github.io/atividade01-eucalyptus)**
-
-**O relatório completo e interativo está publicado no GitHub Pages!**
-
+### 🚀 **[RELATÓRIO COMPLETO PUBLICADO](https://gabrielteoodoro.github.io/atividade01-eucalyptus)**
+**Versão completa e interativa no GitHub Pages**
 - ✅ **Análise estatística completa** - DIC, DBC, Tukey
-- ✅ **Gráficos e tabelas interativas** - Visualização profissional  
-- ✅ **Resultados detalhados** - F(40.05), CV(5.43%), P1 melhor procedência
-- ✅ **Design responsivo** - Funciona em qualquer dispositivo
-- ✅ **Índice navegável** - Acesso rápido às seções
+- ✅ **Design responsivo** - Índice navegável lateral
+- ✅ **Código R com syntax highlighting** - Blocos interativos
+- ✅ **Resultados detalhados** - F(40.05), CV(5.43%), sessionInfo()
+- ✅ **50KB de conteúdo** - Versão mais elaborada
+
+### 📋 **[RELATÓRIO DE ENTREGA](./entrega/RELATORIO_PRINCIPAL.html)**
+**Versão para submissão acadêmica**
+- ✅ **Formato do professor** - Segue mod_relatorio.html exatamente
+- ✅ **Análise completa** - Todos os requisitos atendidos  
+- ✅ **Código limpo** - Sem elementos adicionais
+- ✅ **Pronto para entregar** - Formato acadêmico padrão
+- ✅ **49KB otimizado** - Para download e submissão
 
 ---
 
-## 📁 **ABAS DO PROJETO**
+## 📁 **ESTRUTURA DO PROJETO**
 
 ### 🎓 **[ARQUIVOS DE ENTREGA](./entrega/)**
 **Para submissão acadêmica:**
-- `RELATORIO_PRINCIPAL.html` - Relatório final (50KB)
+- `RELATORIO_PRINCIPAL.html` - **Relatório de entrega (49KB)**
 - `codigo_fonte.qmd` - Código Quarto v2 corrigido
 - `executar_analise.R` - Script R completo
+- `instalar_pacotes.R` - Instalação automática
 - `INSTRUCOES.txt` - Como executar
 
 ### 📚 **[DOCUMENTAÇÃO](./docs/)**
@@ -66,12 +73,17 @@
 
 ## 🛠️ **COMO EXECUTAR**
 
-### **Opção 1: Visualizar Online (Recomendado)**
+### **Opção 1: Visualizar Relatório Publicado (Recomendado)**
 ```
 🌐 https://gabrielteoodoro.github.io/atividade01-eucalyptus
 ```
 
-### **Opção 2: RStudio/Quarto**
+### **Opção 2: Baixar Relatório de Entrega**
+```
+📁 Clicar no link: ./entrega/RELATORIO_PRINCIPAL.html
+```
+
+### **Opção 3: RStudio/Quarto**
 ```r
 # Instalar dependências
 source("src/instalar_pacotes.R")
@@ -80,7 +92,7 @@ source("src/instalar_pacotes.R")
 quarto::quarto_render("entrega/codigo_fonte.qmd")
 ```
 
-### **Opção 3: R Console**
+### **Opção 4: R Console**
 ```r
 # Executar análise completa
 source("src/executar_analise.R")
@@ -102,6 +114,20 @@ source("src/executar_analise.R")
 
 ---
 
+## 🎯 **QUAL RELATÓRIO USAR?**
+
+### 🚀 **Para visualização e apresentação:**
+- **Use o [Relatório Publicado](https://gabrielteoodoro.github.io/atividade01-eucalyptus)**
+- Interface moderna e responsiva
+- Ideal para demonstrações e consultas
+
+### 📋 **Para entrega acadêmica:**
+- **Use o [Relatório de Entrega](./entrega/RELATORIO_PRINCIPAL.html)**  
+- Formato exatamente como o professor solicitou
+- Para download, impressão ou submissão
+
+---
+
 ## 📈 **PRINCIPAIS CONCLUSÕES**
 
 1. **🎯 Diferenças altamente significativas** entre procedências (p < 0.001)
@@ -114,13 +140,17 @@ source("src/executar_analise.R")
 
 ---
 
-## 🔗 **LINKS ÚTEIS**
+## 🔗 **LINKS DIRETOS**
 
-- **📊 [Relatório Completo Online](https://gabrielteoodoro.github.io/atividade01-eucalyptus)**
-- **📁 [Arquivos de Entrega](./entrega/)**
-- **💻 [Código Fonte](./src/)**
-- **📚 [Documentação](./docs/)**
+### **📊 VISUALIZAÇÃO:**
+- **[Relatório Completo Online](https://gabrielteoodoro.github.io/atividade01-eucalyptus)** - Versão interativa
+- **[Relatório de Entrega](./entrega/RELATORIO_PRINCIPAL.html)** - Para download
+
+### **📁 NAVEGAÇÃO:**
+- **[Arquivos de Entrega](./entrega/)** - Pasta completa para submissão
+- **[Código Fonte](./src/)** - Scripts R desenvolvidos
+- **[Documentação](./docs/)** - Materiais de referência
 
 ---
 
-**✨ Análise estatística completa de experimento florestal com Eucalyptus grandis**
+**✨ Projeto completo com duas versões de relatório: uma para visualização online e outra para entrega acadêmica**
