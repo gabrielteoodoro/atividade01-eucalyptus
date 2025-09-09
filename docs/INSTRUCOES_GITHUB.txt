@@ -1,0 +1,37 @@
+
+COMO USAR ESTE RELATÓRIO NO GITHUB:
+
+OPÇÃO 1 - GITHUB PAGES (RECOMENDADO):
+1. Crie uma conta no GitHub (se não tiver)
+2. Crie um novo repositório público
+3. Faça upload do arquivo 'relatorio_github.html' 
+4. Renomeie para 'index.html'
+5. Vá em Settings > Pages
+6. Selecione "Deploy from a branch" > "main"
+7. Aguarde alguns minutos
+8. Acesse: https://seu-usuario.github.io/nome-repositorio
+
+OPÇÃO 2 - GITHUB API (AVANÇADO):
+1. Gere um Personal Access Token em GitHub Settings
+2. Use o código em 'codigo_github_api.py'
+3. Substitua 'seu_token_aqui' pelo token real
+4. Execute o script Python
+
+OPÇÃO 3 - HTMLPREVIEW.GITHUB.IO:
+1. Faça upload do HTML para qualquer repositório
+2. Copie a URL "Raw" do arquivo
+3. Cole em: https://htmlpreview.github.io/?URL_RAW
+
+VANTAGENS DO GITHUB PAGES:
+- URL propria e profissional
+- SSL automatico (HTTPS)
+- Atualizacao automatica
+- Gratuito para repositorios publicos
+- CDN global (carrega rapido)
+
+O relatorio esta otimizado com:
+- Bootstrap via CDN
+- Responsivo (mobile-friendly)
+- TOC navegavel
+- Estilo profissional
+- Todas as analises estatisticas
